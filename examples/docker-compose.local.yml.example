@@ -1,0 +1,20 @@
+# Local-only docker-compose overrides.
+# Use alongside the tracked file:
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml up
+services:
+  vibe:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+      args:
+        BASE_IMAGE: "vibe-kanban:base"
+        EXTRA_APT_PACKAGES: ""
+    environment:
+      - NODE_ENV=development
+      # Uncomment to try different ports locally without touching the repo default.
+      # - PORT=8090
+    volumes:
+      # Inject extra tooling or dotfiles during local runs.
+      # - ./dev-tools:/opt/dev-tools:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

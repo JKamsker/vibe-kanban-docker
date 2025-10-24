@@ -1,0 +1,25 @@
+# Local-only overlay for the main Docker image.
+# Build the tracked base image once with:
+#   docker build -t vibe-kanban:base -f Dockerfile .
+# Then rebuild with your overrides:
+#   docker build -t vibe-kanban:local -f Dockerfile.local .
+ARG BASE_IMAGE="vibe-kanban:base"
+FROM ${BASE_IMAGE}
+
+# Optional: install extra Debian packages just for your machine.
+# Example usage:
+#   docker build -f Dockerfile.local \
+#     --build-arg EXTRA_APT_PACKAGES="vim htop" \
+#     -t vibe-kanban:local .
+ARG EXTRA_APT_PACKAGES=""
+RUN if [ -n "${EXTRA_APT_PACKAGES}" ]; then \
+      apt-get update && \
+      apt-get install -y --no-install-recommends ${EXTRA_APT_PACKAGES} && \
+      rm -rf /var/lib/apt/lists/*; \
+    fi
+
+# Optional: drop development tools or config snippets into the image.
+# COPY ./path/on/host /desired/path/in/container
+
+# Allow local experiments (override defaults from the tracked Dockerfile).
+ENV NODE_ENV="development"

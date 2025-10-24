@@ -84,3 +84,8 @@ dev_assets
 
 vibe-kanban-cloud/
 data/
+
+# Local docker customisations
+Dockerfile.local
+docker-compose.local.yml
+docker-compose.override.yml

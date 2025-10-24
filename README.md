@@ -23,7 +23,7 @@ Containerized developer environment for [Vibe Kanban](https://github.com/BloopAI
 
 ```bash
 # 1. Pick up optional env overrides
-cp .env.example .env  # then edit as needed
+cp examples/.env.example .env  # then edit as needed
 echo "LOCAL_UID=$(id -u)" >> .env
 echo "LOCAL_GID=$(id -g)" >> .env
 
@@ -39,6 +39,19 @@ open http://localhost:8085   # or use your browser
 ```
 
 The service runs as `vibe` inside the Compose file and exposes port `8085` by default. Adjust in `docker-compose.yml` if you prefer another port.
+
+---
+
+### Local Docker overlays
+
+Need extra packages or different dev settings without touching git-tracked files? Copy the provided templates and opt in locally:
+
+```bash
+cp examples/Dockerfile.local.example Dockerfile.local
+cp examples/docker-compose.local.yml.example docker-compose.local.yml
+```
+
+Build the base image once (`docker build -t vibe-kanban:base -f Dockerfile .`), then rebuild with your overrides (`docker compose -f docker-compose.yml -f docker-compose.local.yml up`). Both `.local` files are ignored by git.
 
 ---
 
@@ -81,7 +94,9 @@ The service runs as `vibe` inside the Compose file and exposes port `8085` by de
 |------|---------|
 | `Dockerfile` | Node 22 LTS image with Codex, gh CLI, Docker CLI, build tools. |
 | `docker-compose.yml` | Wires up the Vibe service, volumes, and ports. |
-| `.env.example` | Optional environment overrides (tokens, git identity). |
+| `examples/.env.example` | Optional environment overrides (tokens, git identity). |
+| `examples/Dockerfile.local.example` | Template for local-only Dockerfile overlay (copy → `Dockerfile.local`). |
+| `examples/docker-compose.local.yml.example` | Template for local Docker Compose overrides (copy → `docker-compose.local.yml`). |
 | `data/vibe` | Persisted Vibe state (`config.json`, `db.sqlite`). |
 | `data/work` | Workspace mounted to `/work` inside the container. |
 
