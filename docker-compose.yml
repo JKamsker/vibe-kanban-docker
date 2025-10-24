@@ -14,12 +14,14 @@ services:
       # - GH_TOKEN=${GH_TOKEN}
       # - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
-      - ${HOME}/.codex:/root/.codex
-      - ${HOME}/.config/gh:/root/.config/gh
-      - ${HOME}/.ssh:/root/.ssh:ro
-      - ${HOME}/.gitconfig:/root/.gitconfig:ro
+      - ${HOME}/.codex:/home/node/.codex
+      - ${HOME}/.config/gh:/home/node/.config/gh
+      - ${HOME}/.ssh:/home/node/.ssh:ro
+      - ${HOME}/.gitconfig:/home/node/.gitconfig:ro
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./data/vibe:/root/.local/share/vibe-kanban
+      - ./data/vibe:/home/node/.local/share/vibe-kanban
+      - ./data/cache:/home/node/.cache/utils
+      - ./data/worktrees:/var/tmp/vibe-kanban
       - ./data/work:/work
     ports:
       - "8085:8085"
